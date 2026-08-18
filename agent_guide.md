@@ -1,190 +1,92 @@
-# Agent Guide — Cinema Movie Booking System Backend
+# Agent Guide — Cinema Booking System
 
-This guide helps AI agents (and new developers) understand, build, and extend this
-project. Read it before making changes.
+This guide gives an AI agent and developers everything needed to safely navigate, extend, and debug this codebase.
 
-## 1. What This Project Is
+## 1. Project at a Glance
 
-A backend REST API for a **cinema movie booking system**. Customers can:
+- **What it is:** A REST backend for a cinema booking platform (users, authentication, movies, theaters, screens, seats, shows, bookings, concessions, orders, payments, wallets).
+- **Stack:** Java 21, Spring Boot 3.3.2, Spring Security 6 (JWT Bearer Token), Spring Data JPA, Lombok, MySQL (`mysql-connector-j`), `spring-boot-starter-validation`, **springdoc-openapi 2.5.0 (Swagger UI)**.
+- **Build tool:** Maven (`pom.xml`, groupId `com.cinema`, artifactId `cinema-booking-system`, wrappers `mvnw` / `mvnw.cmd`).
+- **Architecture:** Strictly layered — **Controller → Mapper → Service → Repository → Database**.
+- **Codebase size:** 16 domain tables + Authentication module × full layer stack = 17 controllers, 34+ DTOs, 17 mappers, 17 repositories, 17 services.
 
-- Browse movies and view shows
-- Select seats for a show
-- Book tickets
-- Add food & beverages (popcorn, drinks, combos) to an order
-- Pay via wallet or online gateway
+---
 
-Admins / theater managers can manage locations, theaters, screens, seats, movies, and shows.
+## 2. Package Layout (Base: `src/main/java/com/cinema/booking`)
 
-> **Important current state:** the codebase is at its initial scaffold stage. The only
-> runnable class is `CenimaProjectApplication`, and the source directories (`controller`,
-> `service`, `repository`, `entity`, etc.) exist but contain only `.gitkeep` placeholders.
-> `structure.md` documents the *target* architecture that should be implemented.
+| Layer | Package | Responsibility |
+|---|---|---|
+| Application | `CinemaBookingSystemApplication.java` | Standard `@SpringBootApplication` entry point |
+| Config | `config/` | `SecurityConfig`, `OpenApiConfig`, and Spring Web beans |
+| Controller | `controller/`, `controller/auth/` | REST endpoints, HTTP status codes, `@Valid` validation triggers |
+| Service (interface) | `service/` | Business contract definitions |
+| Service (impl) | `service/impl/` | Business logic, FK resolution, and transaction handling |
+| Mapper | `mapper/` | Pure scalar field copying between DTO ⇄ Entity |
+| Repository | `repository/` | `JpaRepository<Entity, Long>` — CRUD + paging |
+| Entity | `entity/` | JPA `@Entity` classes mapped 1:1 to SQL tables/columns |
+| DTO request | `dto/request/` | `XRequestDto` — API input (flat, FKs as `Long` IDs) with Jakarta Validation |
+| DTO response | `dto/response/` | `XResponseDto` — API output (flat, FKs as `Long` IDs) |
+| Security | `security/` | `JwtService`, `JwtAuthenticationFilter`, `CustomUserDetailsService` |
+| Util | `util/` | `AppConstants`, `SecurityUtil` helper methods |
+| Exception | `exception/` | `GlobalExceptionHandler`, `ResourceNotFoundException`, and custom API exceptions |
 
-## 2. Tech Stack
+---
 
-| Concern | Choice |
-|---|---|
-| Language | Java 21 |
-| Framework | Spring Boot 4.0.7 |
-| Build | Maven (`mvnw`) |
-| Persistence | Spring Data JPA |
-| Databases | H2 (runtime, dev) + PostgreSQL (runtime, prod) |
-| API docs | springdoc-openapi (Swagger UI) |
-| Bean boilerplate | Lombok |
-| Validation | spring-boot-starter-validation |
-| IDs | UUID (`GenerationType.UUID`) |
+## 3. The Domain Tables & Build Order
 
-## 3. Key Commands
+Build order follows FK dependencies:
 
-Run these from the project root. Use the Maven wrapper (`./mvnw` on Linux/macOS, `mvnw.cmd` on Windows).
+1. User (`users`)
+2. Location (`locations`)
+3. Category (`categories`)
+4. Product (`products`)
+5. Theater (`theaters`)
+6. Movie (`movies`)
+7. Screen (`screens`)
+8. Wallet (`wallets`)
+9. Seat (`seats`) — unique on `screen_id + seat_number` in DB
+10. Show (`shows`)
+11. Booking (`bookings`) — unique `booking_code`
+12. BookingSeat (`booking_seats`) — unique on `booking_id + seat_id` in DB
+13. Order (`orders`) — unique `order_number`
+14. OrderItem (`order_items`)
+15. Payment (`payments`)
+16. WalletTransaction (`wallet_transactions`)
 
-```bash
-# Build
-./mvnw clean compile
+Naming: table names are **pluralized snake_case**; entity class names are singular PascalCase.
 
-# Run tests
-./mvnw test
+---
 
-# Run the app
-./mvnw spring-boot:run
+## 4. Request Flow (Canonical Example)
 
-# Package
-./mvnw clean package
-```
+`POST /api/bookings`:
 
-- Tests live in `src/test/java` and use JUnit 5 + `@SpringBootTest`.
-- After any change, run `./mvnw test` to verify nothing breaks.
-- Swagger UI is available at `/swagger-ui.html` when the app is running.
+1. `BookingController.create` receives `BookingRequestDto` (`@Valid @RequestBody`).
+2. `BookingServiceImpl.create` calls `BookingMapper.toEntity(dto)` &rarr; scalar fields only.
+3. **FK resolution in the service:** `userRepository.findById(dto.getCustomerId())` &rarr; sets `booking.setCustomer(...)`; same for `showRepository`.
+4. `bookingRepository.save(booking)` persists to MySQL.
+5. `BookingMapper.toResponseDto(booking)` flattens FK entities back to IDs.
+6. Controller returns `201 Created` with the DTO as JSON.
 
-## 4. Package Layout
+---
 
-Base package: `SpringInit_Project.project_etec.cenima_project`
+## 5. Hard Rules & Conventions (FOLLOW THESE)
 
-```
-src/main/java/SpringInit_Project/project_etec/cenima_project/
-├── CenimaProjectApplication.java     # @SpringBootApplication entry point
-├── config/                  # Security, CORS, OpenAPI, data seeding config
-├── controller/              # REST endpoints (thin, no business logic)
-├── dto/
-│   ├── request/             # Inbound payloads (e.g. MovieRequest, BookingRequest)
-│   └── response/            # Outbound payloads (e.g. MovieResponse, BookingResponse)
-├── entity/                  # JPA entities mapped to DB tables
-├── enums/                   # Enumerations (UserRole, BookingStatus, PaymentStatus, ...)
-├── exception/               # Custom exceptions + global exception handler
-├── mapper/                  # Entity <-> DTO converters (e.g. MovieMapper)
-├── repository/              # Spring Data JPA repositories
-└── service/                 # Business logic layer
-```
+- **One `XController` per entity.** Base path `/api/{plural-kebab-or-snake}`.
+- **Dependency Injection:** Constructor injection via Lombok `@RequiredArgsConstructor` + `private final` fields. **Never** use field injection or `@Autowired` on fields.
+- **Lombok everywhere:** `@Data @NoArgsConstructor @AllArgsConstructor` on entities and DTOs. `@RequiredArgsConstructor` on controllers/services.
+- **Entities:** `@Entity @Table(name = "pluralized_name")`, `@Id @GeneratedValue(strategy = GenerationType.IDENTITY)` on `Long id`, `@Column(name = "...", nullable = ...)`.
+- **Mappers are pure.** No repository access. Only copy scalar fields. FK resolution lives in the Service layer. `toResponseDto` must null-check relations (`entity.getX() != null ? entity.getX().getId() : null`).
+- **DTOs are flat.** FKs are exposed as `Long` IDs, never nested objects.
+- **Missing records:** Throw `new ResourceNotFoundException("<EntityName>", id)` — `GlobalExceptionHandler` converts this into a standardized 404 response.
+- **Null Safety on IDs:** Wrap IDs with `Objects.requireNonNull(id, "...")` or ensure non-null before passing to `findById()` to adhere to Spring Data's `@NonNull` parameters.
 
-Targeted entities (16 core tables):
+---
 
-```
-users, locations, theaters, screens, seats, movies, shows,
-bookings, booking_seats, product_categories, products, orders,
-order_items, payments, wallets, wallet_transactions
-```
+## 6. Build & Test Commands
 
-## 5. Architecture & Layering Rules
-
-Flow: `Controller -> Service -> Repository -> Database`
-
-- **Controller** — HTTP routing, request/response mapping, validation annotations. No business logic.
-- **Service** — business rules and transaction boundaries (`@Transactional`). Called by controllers.
-- **Repository** — Spring Data JPA interfaces, no implementation code.
-- **Mapper** — converts between `Entity` and `DTO` objects; keep it out of controllers/services when possible.
-- **Entity** — JPA annotations only, no DTO fields.
-
-Follow this layering when adding new features.
-
-### API conventions
-
-- REST endpoints under `/api/...` (e.g. `/api/bookings`).
-- Use the controller names already planned in `structure.md`:
-  `AuthController`, `MovieController`, `TheaterController`, `ScreenController`,
-  `SeatController`, `ShowController`, `BookingController`, `ProductCategoryController`,
-  `ProductController`, `OrderController`, `PaymentController`.
-- IDs are UUIDs exposed as path variables: `@PathVariable UUID id`.
-
-### Booking flow (core business transaction)
-
-```
-POST /api/bookings
-  -> Validate customer
-  -> Validate show
-  -> Check seats (already booked -> error)
-  -> Create booking
-  -> Create booking seats
-  -> Calculate ticket total
-  -> Add food/drink order (optional, orders.booking_id nullable)
-  -> Calculate order total
-  -> Calculate grand total
-  -> Create payment
-  -> On success: confirm booking | on failure: cancel / payment failed
-```
-
-Wrap this in a single `@Transactional` service method so partial failures roll back.
-
-### Order rules
-
-- An order may be linked to a booking (`orders.booking_id = booking.id`) **or** stand
-  alone for food-only purchases (`orders.booking_id = NULL`). Keep that column nullable.
-- Order items reference products; products belong to product categories.
-
-## 6. Database Notes
-
-- Use **UUID** primary keys (`@GeneratedValue(strategy = GenerationType.UUID)`).
-- Use `@Table(name = "...")` with plural snake_case table names to match the design docs
-  (`movie_booking_system` schema).
-- Relationships follow the flow docs in `*.md` files at the project root:
-  - Cinema structure: `locations -> theaters -> screens -> seats`
-  - Shows: `movies -> shows -> screens`
-  - Bookings: `users -> bookings -> booking_seats -> seats`
-  - F&B: `product_categories -> products -> order_items -> orders`
-  - Payments: `bookings/orders -> payments -> wallets -> wallet_transactions`
-- H2 is the default runtime DB for local dev; PostgreSQL is configured as the production
-  runtime dependency. See `application.properties`.
-
-## 7. Documentation Files (read before implementing)
-
-Markdown flow docs at the project root describe intended behavior in detail:
-
-| File | Contents |
-|---|---|
-| `structure.md` | Target package/file structure |
-| `cinema_project_flow.md` | Full system spec: tables, relationships, flows, UUID strategy |
-| `business_flow.md` | High-level entity overview |
-| `CompleteSystem_flow.md` | Admin vs customer overview |
-| `Customer_movie_booking_flow.md` | Customer booking journey |
-
-## 8. Code Style & Conventions
-
-- Java 21, standard formatting (tabs, as generated by Spring Initializr).
-- Use Lombok (`@Getter`, `@Setter`, `@NoArgsConstructor`, `@Builder`, etc.) instead of
-  hand-written accessors — it is configured as an annotation processor in `pom.xml`.
-- DTOs for API input/output; never expose entities directly.
-- Use `@Valid` + Jakarta Bean Validation annotations on request DTOs.
-- Custom exceptions should be handled by a global `@RestControllerAdvice`.
-- Do not add comments unless the code genuinely needs explanation.
-
-## 9. Testing
-
-- Unit tests use JUnit 5 (`spring-boot-starter-*-test` dependencies are already present).
-- Follow the existing `CenimaProjectApplicationTests` pattern (`@SpringBootTest`) for integration
-  tests and plain JUnit tests for service/mapper units.
-- Run `./mvnw test` after changes.
-
-## 10. Do's and Don'ts for Agents
-
-**Do:**
-- Keep controllers thin; put logic in services.
-- Annotate service methods that write multiple records with `@Transactional`.
-- Match table/entity/field naming to the flow docs.
-- Use UUID IDs consistently end-to-end (entity -> repository -> service -> controller).
-- Add validation to request DTOs and handle errors centrally.
-
-**Don't:**
-- Don't duplicate business logic across layers.
-- Don't expose JPA entities directly in REST responses.
-- Don't change the base package name (`SpringInit_Project.project_etec.cenima_project`) — tests and
-  Spring component scanning depend on it.
-- Don't commit secrets; keep DB credentials in environment variables / properties, not source.
+- **Java Version:** JDK 21
+- **Compile:** `.\mvnw.cmd test-compile` (Windows) or `./mvnw test-compile` (Linux/macOS)
+- **Run Tests:** `.\mvnw.cmd test`
+- **Run Application:** `.\mvnw.cmd spring-boot:run`
+- **Swagger UI:** `http://localhost:8081/swagger-ui/index.html` (or port configured in `application.properties`)

@@ -31,3 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment & Secrets ###
+.env
+.env.*
+!.env.example
+
+### Application Properties (contains DB passwords, JWT secrets) ###
+src/main/resources/application.properties
+
+### OS Files ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+logs/

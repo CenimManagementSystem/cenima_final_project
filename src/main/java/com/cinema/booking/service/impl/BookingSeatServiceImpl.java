@@ -1,0 +1,76 @@
+package com.cinema.booking.service.impl;
+
+import com.cinema.booking.entity.BookingSeat;
+import com.cinema.booking.entity.Booking;
+import com.cinema.booking.entity.Seat;
+import com.cinema.booking.dto.bookings.BookingSeatRequestDto;
+import com.cinema.booking.dto.bookings.BookingSeatResponseDto;
+import com.cinema.booking.exception.ResourceNotFoundException;
+import com.cinema.booking.mapper.BookingSeatMapper;
+import com.cinema.booking.repository.BookingSeatRepository;
+import com.cinema.booking.repository.BookingRepository;
+import com.cinema.booking.repository.SeatRepository;
+import com.cinema.booking.service.BookingSeatService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class BookingSeatServiceImpl implements BookingSeatService {
+
+    private final BookingSeatRepository bookingSeatRepository;
+    private final BookingSeatMapper bookingSeatMapper;
+    private final BookingRepository bookingRepository;
+    private final SeatRepository seatRepository;
+
+    @Override
+    public BookingSeatResponseDto create(BookingSeatRequestDto dto) {
+        BookingSeat bookingSeat = bookingSeatMapper.toEntity(dto);
+        Booking booking = bookingRepository.findById(dto.getBookingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking", dto.getBookingId()));
+        bookingSeat.setBooking(booking);
+        Seat seat = seatRepository.findById(dto.getSeatId())
+                .orElseThrow(() -> new ResourceNotFoundException("Seat", dto.getSeatId()));
+        bookingSeat.setSeat(seat);
+        bookingSeat = bookingSeatRepository.save(bookingSeat);
+        return bookingSeatMapper.toResponseDto(bookingSeat);
+    }
+
+    @Override
+    public BookingSeatResponseDto update(Long id, BookingSeatRequestDto dto) {
+        BookingSeat existing = bookingSeatRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("BookingSeat", id));
+        BookingSeat updated = bookingSeatMapper.toEntity(dto);
+        updated.setId(existing.getId());
+        updated.setBooking(bookingRepository.findById(dto.getBookingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking", dto.getBookingId())));
+        updated.setSeat(seatRepository.findById(dto.getSeatId())
+                .orElseThrow(() -> new ResourceNotFoundException("Seat", dto.getSeatId())));
+        updated = bookingSeatRepository.save(updated);
+        return bookingSeatMapper.toResponseDto(updated);
+    }
+
+    @Override
+    public BookingSeatResponseDto getById(Long id) {
+        BookingSeat bookingSeat = bookingSeatRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("BookingSeat", id));
+        return bookingSeatMapper.toResponseDto(bookingSeat);
+    }
+
+    @Override
+    public List<BookingSeatResponseDto> getAll() {
+        return bookingSeatRepository.findAll().stream()
+                .map(bookingSeatMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!bookingSeatRepository.existsById(id)) {
+            throw new ResourceNotFoundException("BookingSeat", id);
+        }
+        bookingSeatRepository.deleteById(id);
+    }
+}

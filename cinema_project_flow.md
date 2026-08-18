@@ -400,7 +400,9 @@ PaymentRepository
 MySQL
 ```
 
-## 11. UUID Strategy
+## 11. Identifier Strategy (Active: Long Auto-Increment)
+
+> **Note:** The active backend implementation uses **`Long` auto-increment (`GenerationType.IDENTITY`)** IDs across all 16 entities. Below is an alternative UUID design comparison for reference.
 
 For a UUID-based design:
 

@@ -1,0 +1,52 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: cinema-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cinema_db
+      MYSQL_USER: cinema_user
+      MYSQL_PASSWORD: cinema_pass
+      MYSQL_ROOT_PASSWORD: rith22
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -prith22 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: cinema-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 100M
+    ports:
+      - "8083:80"
+
+  app:
+    build: .
+    container_name: cinema-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cinema_db
+      SPRING_DATASOURCE_USERNAME: cinema_user
+      SPRING_DATASOURCE_PASSWORD: cinema_pass
+      SERVER_PORT: 8080
+    ports:
+      - "8081:8080"
+
+volumes:
+  mysql_data:
