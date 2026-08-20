@@ -1,13 +1,13 @@
 package com.cinema.booking.service.impl;
 
 import com.cinema.booking.entity.Movie;
-import com.cinema.booking.entity.Category;
+import com.cinema.booking.entity.MovieCategory;
 import com.cinema.booking.dto.movies.MovieRequestDto;
 import com.cinema.booking.dto.movies.MovieResponseDto;
 import com.cinema.booking.exception.ResourceNotFoundException;
 import com.cinema.booking.mapper.MovieMapper;
 import com.cinema.booking.repository.MovieRepository;
-import com.cinema.booking.repository.CategoryRepository;
+import com.cinema.booking.repository.MovieCategoryRepository;
 import com.cinema.booking.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,13 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
-    private final CategoryRepository categoryRepository;
+    private final MovieCategoryRepository categoryRepository;
 
     @Override
     public MovieResponseDto create(MovieRequestDto dto) {
         Movie movie = movieMapper.toEntity(dto);
         if (dto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(dto.getCategoryId())
+            MovieCategory category = categoryRepository.findById(dto.getCategoryId())
                     .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getCategoryId()));
             movie.setCategory(category);
         }
