@@ -23,8 +23,8 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 |---|---|---|---|
 | `GET` | `/api/movies` | Get list of all movies | Authenticated |
 | `GET` | `/api/movies/{id}` | Get movie details by ID | Authenticated |
-| `POST` | `/api/movies` | Create a new movie | Admin |
-| `PUT` | `/api/movies/{id}` | Update movie details | Admin |
+| `POST` | `/api/movies` | Create a new movie | Staff / Admin |
+| `PUT` | `/api/movies/{id}` | Update movie details | Staff / Admin |
 | `DELETE` | `/api/movies/{id}` | Delete a movie | Admin |
 
 ---
@@ -35,13 +35,13 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 |---|---|---|---|
 | `GET` | `/api/locations` | List all locations | Authenticated |
 | `GET` | `/api/locations/{id}` | Get location by ID | Authenticated |
-| `POST` | `/api/locations` | Create a location | Admin |
-| `PUT` | `/api/locations/{id}` | Update a location | Admin |
+| `POST` | `/api/locations` | Create a location | Staff / Admin |
+| `PUT` | `/api/locations/{id}` | Update a location | Staff / Admin |
 | `DELETE` | `/api/locations/{id}` | Delete a location | Admin |
 | `GET` | `/api/theaters` | List all theaters | Authenticated |
 | `GET` | `/api/theaters/{id}` | Get theater by ID | Authenticated |
-| `POST` | `/api/theaters` | Create a theater | Admin |
-| `PUT` | `/api/theaters/{id}` | Update a theater | Admin |
+| `POST` | `/api/theaters` | Create a theater | Staff / Admin |
+| `PUT` | `/api/theaters/{id}` | Update a theater | Staff / Admin |
 | `DELETE` | `/api/theaters/{id}` | Delete a theater | Admin |
 
 ---
@@ -52,13 +52,13 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 |---|---|---|---|
 | `GET` | `/api/screens` | List all cinema screens | Authenticated |
 | `GET` | `/api/screens/{id}` | Get screen by ID | Authenticated |
-| `POST` | `/api/screens` | Create a new screen | Admin |
-| `PUT` | `/api/screens/{id}` | Update a screen | Admin |
+| `POST` | `/api/screens` | Create a new screen | Staff / Admin |
+| `PUT` | `/api/screens/{id}` | Update a screen | Staff / Admin |
 | `DELETE` | `/api/screens/{id}` | Delete a screen | Admin |
 | `GET` | `/api/seats` | List all seats | Authenticated |
 | `GET` | `/api/seats/{id}` | Get seat details by ID | Authenticated |
-| `POST` | `/api/seats` | Create a seat | Admin |
-| `PUT` | `/api/seats/{id}` | Update a seat | Admin |
+| `POST` | `/api/seats` | Create a seat | Staff / Admin |
+| `PUT` | `/api/seats/{id}` | Update a seat | Staff / Admin |
 | `DELETE` | `/api/seats/{id}` | Delete a seat | Admin |
 
 ---
@@ -69,9 +69,9 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 |---|---|---|---|
 | `GET` | `/api/shows` | List all showtimes | Authenticated |
 | `GET` | `/api/shows/{id}` | Get showtime by ID | Authenticated |
-| `POST` | `/api/shows` | Create a showtime | Admin |
-| `PUT` | `/api/shows/{id}` | Update a showtime | Admin |
-| `DELETE` | `/api/shows/{id}` | Delete a showtime | Admin |
+| `POST` | `/api/shows` | Create a showtime | Staff / Admin |
+| `PUT` | `/api/shows/{id}` | Update a showtime | Staff / Admin |
+| `DELETE` | `/api/shows/{id}` | Delete a showtime | Staff / Admin |
 
 ---
 
@@ -98,14 +98,14 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 |---|---|---|---|
 | `GET` | `/api/categories` | List food/beverage categories | Authenticated |
 | `GET` | `/api/categories/{id}` | Get category by ID | Authenticated |
-| `POST` | `/api/categories` | Create product category | Admin |
-| `PUT` | `/api/categories/{id}` | Update product category | Admin |
-| `DELETE` | `/api/categories/{id}` | Delete product category | Admin |
+| `POST` | `/api/categories` | Create product category | Staff / Admin |
+| `PUT` | `/api/categories/{id}` | Update product category | Staff / Admin |
+| `DELETE` | `/api/categories/{id}` | Delete product category | Staff / Admin |
 | `GET` | `/api/products` | List all products | Authenticated |
 | `GET` | `/api/products/{id}` | Get product by ID | Authenticated |
-| `POST` | `/api/products` | Create a product | Admin |
-| `PUT` | `/api/products/{id}` | Update a product | Admin |
-| `DELETE` | `/api/products/{id}` | Delete a product | Admin |
+| `POST` | `/api/products` | Create a product | Staff / Admin |
+| `PUT` | `/api/products/{id}` | Update a product | Staff / Admin |
+| `DELETE` | `/api/products/{id}` | Delete a product | Staff / Admin |
 
 ---
 

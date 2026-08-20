@@ -17,5 +17,5 @@ public class ProductResponseDto {
     private BigDecimal price;
     private Integer stockQuantity;
     private LocalDateTime updatedAt;
-    private Long categoryId;
+    private Long productCategoryId;
 }

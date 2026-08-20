@@ -22,5 +22,5 @@ public class ProductRequestDto {
     private Integer stockQuantity;
     private LocalDateTime updatedAt;
     @NotNull
-    private Long categoryId;
+    private Long productCategoryId;
 }

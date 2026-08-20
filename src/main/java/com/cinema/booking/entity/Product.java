@@ -1,11 +1,20 @@
 package com.cinema.booking.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "products")
@@ -18,8 +27,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+   
 
     @Column(name = "description", nullable = true)
     private String description;
@@ -29,6 +37,9 @@ public class Product {
 
     @Column(name = "is_available", nullable = false)
     private Boolean isAvailable;
+    
+     @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -43,7 +54,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "product_category_id", nullable = false)
+    private ProductCategory productCategory;
 
 }

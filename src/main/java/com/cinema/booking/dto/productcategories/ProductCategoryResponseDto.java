@@ -1,9 +1,9 @@
-package com.cinema.booking.dto.category;
+package com.cinema.booking.dto.productcategories;
 
 import lombok.Data;
 
 @Data
-public class CategoryResponseDto {
+public class ProductCategoryResponseDto {
 
     private Long id;
 

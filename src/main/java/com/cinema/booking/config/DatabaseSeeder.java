@@ -23,24 +23,27 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminUsername = "admin";
-        String adminEmail = "admin@cinema.com";
+        seedUserIfNotExists("admin", "admin@cinema.com", "Admin User", "Admin123", Role.ADMIN);
+        seedUserIfNotExists("staff", "staff@cinema.com", "Staff Member", "Staff123", Role.STAFF);
+        seedUserIfNotExists("user", "user@cinema.com", "Regular Customer", "User123", Role.USER);
+    }
 
-        if (!userRepository.existsByUsername(adminUsername) && !userRepository.existsByEmail(adminEmail)) {
-            User admin = new User();
-            admin.setUsername(adminUsername);
-            admin.setEmail(adminEmail);
-            admin.setName("Admin User");
-            admin.setPassword(passwordEncoder.encode("Admin123"));
-            admin.setRole(Role.ADMIN);
-            admin.setStatus("ACTIVE");
-            admin.setCreatedAt(LocalDateTime.now());
-            admin.setUpdatedAt(LocalDateTime.now());
+    private void seedUserIfNotExists(String username, String email, String name, String rawPassword, Role role) {
+        if (!userRepository.existsByUsername(username) && !userRepository.existsByEmail(email)) {
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setName(name);
+            user.setPassword(passwordEncoder.encode(rawPassword));
+            user.setRole(role);
+            user.setStatus("ACTIVE");
+            user.setCreatedAt(LocalDateTime.now());
+            user.setUpdatedAt(LocalDateTime.now());
 
-            userRepository.save(admin);
-            log.info("Default admin user created successfully with username '{}'", adminUsername);
+            userRepository.save(user);
+            log.info("Default {} user created: username='{}', email='{}'", role, username, email);
         } else {
-            log.info("Admin user already exists. Skipping database seeding.");
+            log.debug("User with username='{}' or email='{}' already exists. Skipping.", username, email);
         }
     }
 }

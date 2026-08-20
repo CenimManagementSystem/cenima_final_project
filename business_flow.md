@@ -4,23 +4,27 @@
         │                │                │
       MOVIE           THEATER          CUSTOMER
         │                │                │
-        │              SCREEN             │
+        │              SCREEN           WALLET
         │                │                │
         │              SEAT               │
         │                │                │
         └─────── SHOW ───┘                │
                  │                        │
-                 ▼                        │
-              BOOKING ◄──────────────────┘
+                 ▼                        ▼
+              BOOKING ◄───────────────────┘
+        ┌────────┼────────┐
+        │        │        │
+      SEATS    ORDER   PAYMENT
                  │
-          ┌──────┴──────┐
-          │             │
-        SEATS          ORDER
-                        │
-                  ┌─────┴─────┐
-                  │           │
-              PRODUCTS    ORDER_ITEMS
-                  │
-          ┌───────┼────────┐
-          │       │        │
-       POPCORN  DRINK     FOOD
+           ┌─────┴─────┐
+           │           │
+       PRODUCTS    ORDER_ITEMS
+           │
+     ┌─────┼─────┐
+     │     │     │
+  POPCORN DRINK FOOD
+        │
+        ▼
+     TICKET
+        │
+     QR CODE

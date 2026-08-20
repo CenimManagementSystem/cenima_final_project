@@ -1,13 +1,13 @@
 package com.cinema.booking.service.impl;
 
 import com.cinema.booking.entity.Product;
-import com.cinema.booking.entity.Category;
+import com.cinema.booking.entity.ProductCategory;
 import com.cinema.booking.dto.products.ProductRequestDto;
 import com.cinema.booking.dto.products.ProductResponseDto;
 import com.cinema.booking.exception.ResourceNotFoundException;
 import com.cinema.booking.mapper.ProductMapper;
 import com.cinema.booking.repository.ProductRepository;
-import com.cinema.booking.repository.CategoryRepository;
+import com.cinema.booking.repository.ProductCategoryRepository;
 import com.cinema.booking.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,14 +20,14 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final CategoryRepository categoryRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @Override
     public ProductResponseDto create(ProductRequestDto dto) {
         Product product = productMapper.toEntity(dto);
-        Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getCategoryId()));
-        product.setCategory(category);
+        ProductCategory productCategory = productCategoryRepository.findById(dto.getProductCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("ProductCategory", dto.getProductCategoryId()));
+        product.setProductCategory(productCategory);
         product = productRepository.save(product);
         return productMapper.toResponseDto(product);
     }
@@ -38,8 +38,8 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
         Product updated = productMapper.toEntity(dto);
         updated.setId(existing.getId());
-        updated.setCategory(categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getCategoryId())));
+        updated.setProductCategory(productCategoryRepository.findById(dto.getProductCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("ProductCategory", dto.getProductCategoryId())));
         updated = productRepository.save(updated);
         return productMapper.toResponseDto(updated);
     }

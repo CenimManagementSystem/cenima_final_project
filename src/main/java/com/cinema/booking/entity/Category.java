@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "movie_categories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,13 +16,13 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "description", nullable = true)
     private String description;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
-
-    @Column(name = "name", nullable = false)
-    private String name;
 
 }

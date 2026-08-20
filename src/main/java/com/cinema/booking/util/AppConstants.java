@@ -12,5 +12,6 @@ public final class AppConstants {
     public static final String DEFAULT_SORT_DIRECTION = "asc";
 
     public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_STAFF = "ROLE_STAFF";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 }

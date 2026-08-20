@@ -121,16 +121,34 @@ If you prefer running the application directly on your machine:
 
 ---
 
-## 🔑 Default Admin Credentials
+## 🔑 Default Seeded Accounts
 
-When the backend starts up, `DatabaseSeeder` automatically creates an active administrator account:
+When the backend starts up, `DatabaseSeeder` automatically initializes default accounts:
 
-- **Username**: `admin`
-- **Email**: `admin@cinema.com`
-- **Password**: `Admin123`
-- **Role**: `ROLE_ADMIN`
+| Role | Username | Email | Password | Authorities |
+|---|---|---|---|---|
+| **Admin** | `admin` | `admin@cinema.com` | `Admin123` | `ROLE_ADMIN` |
+| **Staff** | `staff` | `staff@cinema.com` | `Staff123` | `ROLE_STAFF` |
+| **User** | `user` | `user@cinema.com` | `User123` | `ROLE_USER` |
 
-Use these credentials in `/api/auth/login` to obtain an admin JWT Bearer token.
+Use these credentials in `/api/auth/login` to obtain JWT Bearer tokens with corresponding role privileges.
+
+---
+
+## 🛡️ Security Architecture & Rate Limiting
+
+The backend implements a multi-layered security pipeline:
+1. **Authentication & Flexible Login**: Supports login via username or email; validates user active status.
+2. **JWT Security**: HMAC-SHA256 signed tokens containing user authorities with token validation & error resilience.
+3. **Role Hierarchy**: `ROLE_ADMIN > ROLE_STAFF > ROLE_USER` via Spring Security 6 Method Security.
+4. **Rate Limiting**: Thread-safe sliding-window rate limiting per IP:
+   - `/api/auth/**`: 10 requests / minute (Brute-force protection).
+   - `/api/**`: 100 requests / minute (DoS protection).
+   - Responds with `429 Too Many Requests` and `Retry-After: 60` header.
+5. **Input Validation**: Strict `@Valid` schema enforcement with clear field error reporting.
+6. **CORS**: Configurable allowed origins, headers, methods, credentials, and preflight max-age.
+7. **Password Hashing**: BCrypt (strength 12) across authentication, user management, and seeders.
+8. **Secure Error Handling**: Centralized `GlobalExceptionHandler` with standardized JSON error payloads (400, 401, 403, 404, 409, 429, 500) preventing sensitive server stack leakages.
 
 ---
 

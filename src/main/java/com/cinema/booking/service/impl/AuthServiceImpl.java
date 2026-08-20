@@ -1,18 +1,21 @@
 package com.cinema.booking.service.impl;
 
-import com.cinema.booking.enums.Role;
+import com.cinema.booking.dto.auth.AuthResponseDto;
 import com.cinema.booking.dto.auth.LoginRequestDto;
 import com.cinema.booking.dto.auth.RegisterRequestDto;
-import com.cinema.booking.dto.auth.AuthResponseDto;
 import com.cinema.booking.dto.auth.RegisterResponseDto;
 import com.cinema.booking.dto.users.UserResponseDto;
 import com.cinema.booking.entity.User;
+import com.cinema.booking.enums.Role;
+import com.cinema.booking.exception.ResourceNotFoundException;
 import com.cinema.booking.exception.UserAlreadyExistsException;
 import com.cinema.booking.repository.UserRepository;
 import com.cinema.booking.security.JwtService;
 import com.cinema.booking.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -67,17 +70,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDto login(LoginRequestDto dto) {
+        String principal = dto.getPrincipal();
+        if (principal.isBlank()) {
+            throw new BadCredentialsException("Username or email is required");
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        dto.getUsername(),
+                        principal,
                         dto.getPassword()
                 )
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getUsername());
-        User user = userRepository.findByUsernameOrEmail(dto.getUsername(), dto.getUsername())
-                .orElseGet(() -> userRepository.findByEmail(dto.getUsername())
-                        .orElseThrow(() -> new RuntimeException("User not found")));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal);
+        User user = userRepository.findByUsernameOrEmail(principal, principal)
+                .orElseGet(() -> userRepository.findByEmail(principal)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found with identifier: " + principal)));
+
+        if (user.getStatus() != null && !"ACTIVE".equalsIgnoreCase(user.getStatus())) {
+            throw new DisabledException("Account is disabled or inactive");
+        }
 
         String jwtToken = jwtService.generateToken(userDetails);
 

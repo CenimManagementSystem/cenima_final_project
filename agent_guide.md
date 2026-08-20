@@ -26,9 +26,9 @@ This guide gives an AI agent and developers everything needed to safely navigate
 | Entity | `entity/` | JPA `@Entity` classes mapped 1:1 to SQL tables/columns |
 | DTO request | `dto/request/` | `XRequestDto` — API input (flat, FKs as `Long` IDs) with Jakarta Validation |
 | DTO response | `dto/response/` | `XResponseDto` — API output (flat, FKs as `Long` IDs) |
-| Security | `security/` | `JwtService`, `JwtAuthenticationFilter`, `CustomUserDetailsService` |
+| Security | `security/`, `security/ratelimit/` | `JwtService`, `JwtAuthenticationFilter`, `CustomUserDetailsService`, `RateLimiterService`, `RateLimitingFilter` |
 | Util | `util/` | `AppConstants`, `SecurityUtil` helper methods |
-| Exception | `exception/` | `GlobalExceptionHandler`, `ResourceNotFoundException`, and custom API exceptions |
+| Exception | `exception/` | `GlobalExceptionHandler`, `RateLimitExceededException`, `ResourceNotFoundException`, and custom API exceptions |
 
 ---
 
@@ -36,7 +36,7 @@ This guide gives an AI agent and developers everything needed to safely navigate
 
 Build order follows FK dependencies:
 
-1. User (`users`)
+1. User (`users`) — roles: `USER`, `STAFF`, `ADMIN`
 2. Location (`locations`)
 3. Category (`categories`)
 4. Product (`products`)
@@ -57,16 +57,18 @@ Naming: table names are **pluralized snake_case**; entity class names are singul
 
 ---
 
-## 4. Request Flow (Canonical Example)
+## 4. Request Flow & Security Pipeline (Canonical Example)
 
 `POST /api/bookings`:
 
-1. `BookingController.create` receives `BookingRequestDto` (`@Valid @RequestBody`).
-2. `BookingServiceImpl.create` calls `BookingMapper.toEntity(dto)` &rarr; scalar fields only.
-3. **FK resolution in the service:** `userRepository.findById(dto.getCustomerId())` &rarr; sets `booking.setCustomer(...)`; same for `showRepository`.
-4. `bookingRepository.save(booking)` persists to MySQL.
-5. `BookingMapper.toResponseDto(booking)` flattens FK entities back to IDs.
-6. Controller returns `201 Created` with the DTO as JSON.
+1. **Rate Limiting:** `RateLimitingFilter` verifies client IP request frequency under configured threshold (10 req/min for auth, 100 req/min for general). Returns `429 Too Many Requests` if exceeded.
+2. **JWT Authentication:** `JwtAuthenticationFilter` validates `Bearer <token>`, resolves claims and user authorities, setting `SecurityContextHolder`.
+3. **Role Authorization:** Spring Security evaluates `@EnableMethodSecurity` and `RoleHierarchy` (`ADMIN > STAFF > USER`).
+4. **Input Validation:** `BookingController.create` validates `BookingRequestDto` (`@Valid @RequestBody`).
+5. **Business Logic & FK Resolution:** `BookingServiceImpl.create` calls `BookingMapper.toEntity(dto)` &rarr; scalar fields only; resolves `customer` from `userRepository` and `show` from `showRepository`.
+6. **Data Persistence:** `bookingRepository.save(booking)` persists to MySQL.
+7. **Response Mapping:** `BookingMapper.toResponseDto(booking)` flattens FK entities back to IDs.
+8. **HTTP Response:** Controller returns `201 Created` with the DTO as JSON.
 
 ---
 
@@ -76,10 +78,11 @@ Naming: table names are **pluralized snake_case**; entity class names are singul
 - **Dependency Injection:** Constructor injection via Lombok `@RequiredArgsConstructor` + `private final` fields. **Never** use field injection or `@Autowired` on fields.
 - **Lombok everywhere:** `@Data @NoArgsConstructor @AllArgsConstructor` on entities and DTOs. `@RequiredArgsConstructor` on controllers/services.
 - **Entities:** `@Entity @Table(name = "pluralized_name")`, `@Id @GeneratedValue(strategy = GenerationType.IDENTITY)` on `Long id`, `@Column(name = "...", nullable = ...)`.
+- **Password Security:** Always hash passwords with `PasswordEncoder` (BCrypt 12). Never store or return raw passwords.
 - **Mappers are pure.** No repository access. Only copy scalar fields. FK resolution lives in the Service layer. `toResponseDto` must null-check relations (`entity.getX() != null ? entity.getX().getId() : null`).
 - **DTOs are flat.** FKs are exposed as `Long` IDs, never nested objects.
 - **Missing records:** Throw `new ResourceNotFoundException("<EntityName>", id)` — `GlobalExceptionHandler` converts this into a standardized 404 response.
-- **Null Safety on IDs:** Wrap IDs with `Objects.requireNonNull(id, "...")` or ensure non-null before passing to `findById()` to adhere to Spring Data's `@NonNull` parameters.
+- **Security & Error Sanitization:** Never leak internal stack traces or database errors in API responses. Use `GlobalExceptionHandler` to format standardized `ErrorResponse` objects.
 
 ---
 
@@ -90,3 +93,4 @@ Naming: table names are **pluralized snake_case**; entity class names are singul
 - **Run Tests:** `.\mvnw.cmd test`
 - **Run Application:** `.\mvnw.cmd spring-boot:run`
 - **Swagger UI:** `http://localhost:8081/swagger-ui/index.html` (or port configured in `application.properties`)
+

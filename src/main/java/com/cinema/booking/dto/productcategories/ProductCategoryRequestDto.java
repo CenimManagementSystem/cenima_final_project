@@ -1,11 +1,11 @@
-package com.cinema.booking.dto.category;
+package com.cinema.booking.dto.productcategories;
 
 import jakarta.validation.constraints.*;
 
 import lombok.Data;
 
 @Data
-public class CategoryRequestDto {
+public class ProductCategoryRequestDto {
 
     private String description;
     @NotNull

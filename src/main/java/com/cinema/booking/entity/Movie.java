@@ -20,6 +20,10 @@ public class Movie {
     @Column(name = "age_rating", nullable = true)
     private String ageRating;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = true)
+    private Category category;
+
     @Column(name = "description", nullable = true)
     private String description;
 

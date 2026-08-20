@@ -26,6 +26,7 @@ public class MovieMapper {
         MovieResponseDto dto = new MovieResponseDto();
         dto.setId(movie.getId());
         dto.setAgeRating(movie.getAgeRating());
+        dto.setCategoryId(movie.getCategory() != null ? movie.getCategory().getId() : null);
         dto.setDescription(movie.getDescription());
         dto.setDurationMinutes(movie.getDurationMinutes());
         dto.setGenre(movie.getGenre());

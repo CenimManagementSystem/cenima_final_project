@@ -12,12 +12,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequestDto {
 
-    @NotBlank(message = "Username is required")
     private String username;
 
-    @NotBlank(message = "Email is required")
     private String email;
 
     @NotBlank(message = "Password is required")
     private String password;
+
+    public String getPrincipal() {
+        if (username != null && !username.isBlank()) {
+            return username.trim();
+        }
+        if (email != null && !email.isBlank()) {
+            return email.trim();
+        }
+        return "";
+    }
 }

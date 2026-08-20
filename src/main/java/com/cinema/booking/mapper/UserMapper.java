@@ -11,13 +11,14 @@ public class UserMapper {
     public User toEntity(UserRequestDto dto) {
         User user = new User();
       
+        user.setUsername(dto.getUsername() != null ? dto.getUsername() : dto.getEmail());
         user.setEmail(dto.getEmail());
         user.setName(dto.getName());
         user.setPassword(dto.getPassword());
         user.setRole(dto.getRole());
-        user.setStatus(dto.getStatus());
-        user.setCreatedAt(dto.getCreatedAt());
-        user.setUpdatedAt(dto.getUpdatedAt()); 
+        user.setStatus(dto.getStatus() != null ? dto.getStatus() : "ACTIVE");
+        user.setCreatedAt(dto.getCreatedAt() != null ? dto.getCreatedAt() : java.time.LocalDateTime.now());
+        user.setUpdatedAt(dto.getUpdatedAt() != null ? dto.getUpdatedAt() : java.time.LocalDateTime.now()); 
         return user;
     }
 

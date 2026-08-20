@@ -9,6 +9,7 @@ public class MovieResponseDto {
     private Long id;
 
     private String ageRating;
+    private Long categoryId;
     private String description;
     private Integer durationMinutes;
     private String genre;
