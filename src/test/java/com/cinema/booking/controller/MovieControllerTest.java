@@ -101,7 +101,6 @@ public class MovieControllerTest {
         testMovie.setLanguage("English");
         testMovie.setReleaseDate(LocalDate.of(2010, 7, 16));
         testMovie.setPosterUrl("https://example.com/poster.jpg");
-        testMovie.setAgeRating("PG-13");
         testMovie.setStatus("NOW_SHOWING");
         testMovie = movieRepository.save(testMovie);
     }
@@ -139,7 +138,6 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2014, 11, 7));
         dto.setPosterUrl("https://example.com/interstellar.jpg");
-        dto.setAgeRating("PG-13");
         dto.setStatus("NOW_SHOWING");
 
         mockMvc.perform(post("/api/movies")
@@ -179,7 +177,6 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2010, 7, 16));
         dto.setPosterUrl("https://example.com/inception2.jpg");
-        dto.setAgeRating("PG-13");
         dto.setStatus("NOW_SHOWING");
 
         mockMvc.perform(put("/api/movies/{id}", testMovie.getId())
@@ -203,7 +200,6 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2025, 1, 1));
         dto.setPosterUrl("https://example.com/poster.jpg");
-        dto.setAgeRating("PG");
         dto.setStatus("COMING_SOON");
 
         mockMvc.perform(put("/api/movies/{id}", nonExistentId)
@@ -255,7 +251,6 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2025, 1, 1));
         dto.setPosterUrl("https://example.com/poster.jpg");
-        dto.setAgeRating("PG");
         dto.setStatus("COMING_SOON");
 
         mockMvc.perform(post("/api/movies")
