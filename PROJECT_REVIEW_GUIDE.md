@@ -159,7 +159,11 @@ Branch strategy:
 | [SystemFlow.md](SystemFlow.md) | Sequence diagrams (customer/staff/admin flows) |
 | [cinema_project_flow.md](cinema_project_flow.md) | DB schema, relationships, transaction flow |
 | [agent_guide.md](agent_guide.md) | Coding standards & hard rules |
+| [src/main/doc/A_practical_workflow.md](src/main/doc/A_practical_workflow.md) | Practical Git branch workflow (main, dev, features) with CI/Qodana |
+| [src/main/doc/StoreImageFlow.md](src/main/doc/StoreImageFlow.md) | Product image storage flow (Cloudinary + DB) |
+| [src/main/doc/MovieCRUDflow.md](src/main/doc/MovieCRUDflow.md) | Movie poster upload flow (Cloudinary + DB) |
 | [src/main/doc/cicd.md](src/main/doc/cicd.md) | CI/CD design plan |
+
 
 ---
 

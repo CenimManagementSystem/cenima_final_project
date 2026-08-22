@@ -28,8 +28,8 @@ Client / Swagger UI  ──(JWT Bearer)──▶  Controller  ──▶  Service
 - **Complete Domain Coverage (16 Entities + Auth)**:
   - 👤 **Users & Wallets**: User registration/login, customer wallets, transactions (`/api/auth`, `/api/users`, `/api/wallets`, `/api/wallet-transactions`)
   - 🏢 **Cinemas & Rooms**: Theaters, physical locations, screens, and seat maps (`/api/locations`, `/api/theaters`, `/api/screens`, `/api/seats`)
-  - 🍿 **Concessions & Products**: Categories, food & beverages, popcorn, drinks (`/api/categories`, `/api/products`)
-  - 🎟️ **Movies & Shows**: Active movie catalog, scheduling showtimes (`/api/movies`, `/api/shows`)
+  - 🍿 **Concessions & Products**: Categories, food & beverages, popcorn, drinks (`/api/product-categories`, `/api/products`) with Cloudinary image storage
+  - 🎟️ **Movies & Shows**: Active movie catalog, scheduling showtimes (`/api/movies`, `/api/shows`) with Cloudinary movie poster storage
   - 🛒 **Ticketing & Orders**: Seat locking, booking reservations, concession orders (`/api/bookings`, `/api/booking-seats`, `/api/orders`, `/api/order-items`)
   - 💳 **Payments**: Payment processing and wallet balance deductions (`/api/payments`)
 - **Validation**: Strict request payload validation using `jakarta.validation` (`@Valid`, `@NotBlank`, `@NotNull`, `@Min`, `@Email`).
@@ -221,3 +221,8 @@ The repository includes a comprehensive test suite (Unit & MockMvc Integration t
 | [**`SystemFlow.md`**](SystemFlow.md) | Visual workflow and sequence diagrams for Customers and Admins |
 | [**`agent_guide.md`**](agent_guide.md) | Developer guidelines, coding standards, and architectural rules |
 | [**`cinema_project_flow.md`**](cinema_project_flow.md) | Relational schema and transaction life-cycle documentation |
+| [**`src/main/doc/A_practical_workflow.md`**](src/main/doc/A_practical_workflow.md) | Practical Git branch workflow (main, dev, features) with CI/Qodana |
+| [**`src/main/doc/StoreImageFlow.md`**](src/main/doc/StoreImageFlow.md) | Diagram showing the Product image storage flow (Cloudinary + DB) |
+| [**`src/main/doc/MovieCRUDflow.md`**](src/main/doc/MovieCRUDflow.md) | Diagram showing the Movie poster upload flow (Cloudinary + DB) |
+| [**`src/main/doc/cicd.md`**](src/main/doc/cicd.md) | CI/CD Git branch promotion and testing strategy |
+

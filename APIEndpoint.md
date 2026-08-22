@@ -92,20 +92,20 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 7. Concessions & Products (`/api/categories`, `/api/products`)
+## 7. Concessions & Products (`/api/product-categories`, `/api/products`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
-| `GET` | `/api/categories` | List food/beverage categories | Authenticated |
-| `GET` | `/api/categories/{id}` | Get category by ID | Authenticated |
-| `POST` | `/api/categories` | Create product category | Staff / Admin |
-| `PUT` | `/api/categories/{id}` | Update product category | Staff / Admin |
-| `DELETE` | `/api/categories/{id}` | Delete product category | Staff / Admin |
+| `GET` | `/api/product-categories` | List food/beverage categories | Authenticated |
+| `GET` | `/api/product-categories/{id}` | Get category by ID | Authenticated |
+| `POST` | `/api/product-categories` | Create product category | Staff / Admin |
+| `PUT` | `/api/product-categories/{id}` | Update product category | Staff / Admin |
+| `DELETE` | `/api/product-categories/{id}` | Delete product category | Staff / Admin |
 | `GET` | `/api/products` | List all products | Authenticated |
 | `GET` | `/api/products/{id}` | Get product by ID | Authenticated |
-| `POST` | `/api/products` | Create a product | Staff / Admin |
-| `PUT` | `/api/products/{id}` | Update a product | Staff / Admin |
-| `DELETE` | `/api/products/{id}` | Delete a product | Staff / Admin |
+| `POST` | `/api/products` | Create a product (`multipart/form-data` with optional `image` file) | Staff / Admin |
+| `PUT` | `/api/products/{id}` | Update a product (`multipart/form-data` with optional `image` file) | Staff / Admin |
+| `DELETE` | `/api/products/{id}` | Delete a product (removes image from Cloudinary) | Staff / Admin |
 
 ---
 
