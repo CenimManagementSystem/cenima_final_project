@@ -47,6 +47,7 @@ Client / Swagger UI  ──(JWT Bearer)──▶  Controller  ──▶  Service
 | **Database** | MySQL 8.0+ |
 | **ORM / Data Access** | Spring Data JPA (Hibernate 6) |
 | **API Docs** | springdoc-openapi 2.5.0 (Swagger UI) |
+| **Dev Tools** | Spring Boot DevTools (Live Auto-Reload) |
 | **Build Tool** | Maven (wrappers `mvnw` / `mvnw.cmd` included) |
 | **Containers** | Docker & Docker Compose |
 
@@ -117,6 +118,10 @@ If you prefer running the application directly on your machine:
    # Linux / macOS:
    ./mvnw spring-boot:run
    ```
+
+   > [!TIP]
+   > **Spring Boot DevTools** is enabled. When running locally, recompiling or modifying Java source files will automatically restart the application without needing a full manual restart.
+
 4. Access the API and Swagger UI at **`http://localhost:8081/swagger-ui/index.html`**.
 
 ---
@@ -230,6 +235,7 @@ The repository includes a comprehensive test suite (Unit & MockMvc Integration t
 | [**`APIEndpoint.md`**](APIEndpoint.md) | Complete REST API endpoint reference and role permissions |
 | [**`Structure.md`**](Structure.md) | Comprehensive directory tree and layer responsibility guide |
 | [**`SystemFlow.md`**](SystemFlow.md) | Visual workflow and sequence diagrams for Customers and Admins |
+| [**`business_flow.md`**](business_flow.md) | Cinema system domain architecture & business entity tree |
 | [**`agent_guide.md`**](agent_guide.md) | Developer guidelines, coding standards, and architectural rules |
 | [**`cinema_project_flow.md`**](cinema_project_flow.md) | Relational schema and transaction life-cycle documentation |
 | [**`src/main/doc/A_practical_workflow.md`**](src/main/doc/A_practical_workflow.md) | Practical Git branch workflow (main, dev, features) with CI/Qodana |
