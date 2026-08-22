@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -101,8 +102,13 @@ public class MovieControllerTest {
         testMovie.setLanguage("English");
         testMovie.setReleaseDate(LocalDate.of(2010, 7, 16));
         testMovie.setPosterUrl("https://example.com/poster.jpg");
-        testMovie.setAgeRating("PG-13");
         testMovie.setStatus("NOW_SHOWING");
+        testMovie.setRating(8.8);
+        testMovie.setBasePrice(BigDecimal.valueOf(12.50));
+        testMovie.setDirector("Christopher Nolan");
+        testMovie.setCast("Leonardo DiCaprio, Joseph Gordon-Levitt");
+        testMovie.setBackdropUrl("https://example.com/backdrop.jpg");
+        testMovie.setTrailerUrl("https://youtube.com/embed/inception");
         testMovie = movieRepository.save(testMovie);
     }
 
@@ -139,8 +145,13 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2014, 11, 7));
         dto.setPosterUrl("https://example.com/interstellar.jpg");
-        dto.setAgeRating("PG-13");
         dto.setStatus("NOW_SHOWING");
+        dto.setRating(8.6);
+        dto.setBasePrice(BigDecimal.valueOf(12.50));
+        dto.setDirector("Christopher Nolan");
+        dto.setCast("Matthew McConaughey, Anne Hathaway");
+        dto.setBackdropUrl("https://example.com/interstellar_backdrop.jpg");
+        dto.setTrailerUrl("https://youtube.com/embed/interstellar");
 
         mockMvc.perform(post("/api/movies")
                         .header("Authorization", "Bearer " + adminToken)
@@ -149,7 +160,9 @@ public class MovieControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.title").value("Interstellar"))
-                .andExpect(jsonPath("$.durationMinutes").value(169));
+                .andExpect(jsonPath("$.durationMinutes").value(169))
+                .andExpect(jsonPath("$.rating").value(8.6))
+                .andExpect(jsonPath("$.director").value("Christopher Nolan"));
     }
 
     @Test
@@ -179,8 +192,13 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2010, 7, 16));
         dto.setPosterUrl("https://example.com/inception2.jpg");
-        dto.setAgeRating("PG-13");
         dto.setStatus("NOW_SHOWING");
+        dto.setRating(8.9);
+        dto.setBasePrice(BigDecimal.valueOf(15.00));
+        dto.setDirector("Christopher Nolan");
+        dto.setCast("Leonardo DiCaprio, Ellen Page");
+        dto.setBackdropUrl("https://example.com/inception_backdrop.jpg");
+        dto.setTrailerUrl("https://youtube.com/embed/inception_remastered");
 
         mockMvc.perform(put("/api/movies/{id}", testMovie.getId())
                         .header("Authorization", "Bearer " + adminToken)
@@ -189,7 +207,9 @@ public class MovieControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testMovie.getId()))
                 .andExpect(jsonPath("$.title").value("Inception - Remastered"))
-                .andExpect(jsonPath("$.durationMinutes").value(150));
+                .andExpect(jsonPath("$.durationMinutes").value(150))
+                .andExpect(jsonPath("$.rating").value(8.9))
+                .andExpect(jsonPath("$.basePrice").value(15.00));
     }
 
     @Test
@@ -203,8 +223,13 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2025, 1, 1));
         dto.setPosterUrl("https://example.com/poster.jpg");
-        dto.setAgeRating("PG");
         dto.setStatus("COMING_SOON");
+        dto.setRating(7.0);
+        dto.setBasePrice(BigDecimal.valueOf(10.00));
+        dto.setDirector("Unknown");
+        dto.setCast("Unknown");
+        dto.setBackdropUrl("https://example.com/backdrop.jpg");
+        dto.setTrailerUrl("https://youtube.com/embed/unknown");
 
         mockMvc.perform(put("/api/movies/{id}", nonExistentId)
                         .header("Authorization", "Bearer " + adminToken)
@@ -255,8 +280,13 @@ public class MovieControllerTest {
         dto.setLanguage("English");
         dto.setReleaseDate(LocalDate.of(2025, 1, 1));
         dto.setPosterUrl("https://example.com/poster.jpg");
-        dto.setAgeRating("PG");
         dto.setStatus("COMING_SOON");
+        dto.setRating(5.0);
+        dto.setBasePrice(BigDecimal.valueOf(8.00));
+        dto.setDirector("Unauthorized");
+        dto.setCast("Unauthorized");
+        dto.setBackdropUrl("https://example.com/backdrop.jpg");
+        dto.setTrailerUrl("https://youtube.com/embed/unauthorized");
 
         mockMvc.perform(post("/api/movies")
                         .header("Authorization", "Bearer " + userToken)

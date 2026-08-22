@@ -18,13 +18,19 @@ public class MovieMapper {
         movie.setReleaseDate(dto.getReleaseDate());
         movie.setStatus(dto.getStatus());
         movie.setTitle(dto.getTitle());
+        movie.setRating(dto.getRating());
+        movie.setBasePrice(dto.getBasePrice());
+        movie.setDirector(dto.getDirector());
+        movie.setCast(dto.getCast());
+        movie.setBackdropUrl(dto.getBackdropUrl());
+        movie.setTrailerUrl(dto.getTrailerUrl());
         return movie;
     }
 
     public MovieResponseDto toResponseDto(Movie movie) {
         MovieResponseDto dto = new MovieResponseDto();
         dto.setId(movie.getId());
-        dto.setCategoryId(movie.getCategory() != null ? movie.getCategory().getId() : null);
+        dto.setMovieCategoryId(movie.getMovieCategory() != null ? movie.getMovieCategory().getId() : null);
         dto.setDescription(movie.getDescription());
         dto.setDurationMinutes(movie.getDurationMinutes());
         dto.setGenre(movie.getGenre());
@@ -34,6 +40,12 @@ public class MovieMapper {
         dto.setReleaseDate(movie.getReleaseDate());
         dto.setStatus(movie.getStatus());
         dto.setTitle(movie.getTitle());
+        dto.setRating(movie.getRating());
+        dto.setBasePrice(movie.getBasePrice());
+        dto.setDirector(movie.getDirector());
+        dto.setCast(movie.getCast());
+        dto.setBackdropUrl(movie.getBackdropUrl());
+        dto.setTrailerUrl(movie.getTrailerUrl());
         return dto;
     }
 }

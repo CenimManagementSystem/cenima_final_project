@@ -1,5 +1,6 @@
 package com.cinema.booking.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -26,10 +27,9 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = true)
-    private MovieCategory category;
+    @JoinColumn(name = "movie_category_id", nullable = true)
+    private MovieCategory movieCategory;
 
     @Column(name = "description", nullable = true)
     private String description;
@@ -57,4 +57,22 @@ public class Movie {
 
     @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "rating", nullable = true)
+    private Double rating;
+
+    @Column(name = "base_price", nullable = true)
+    private BigDecimal basePrice;
+
+    @Column(name = "director", nullable = true)
+    private String director;
+
+    @Column(name = "cast_members", nullable = true)
+    private String cast;
+
+    @Column(name = "backdrop_url", nullable = true)
+    private String backdropUrl;
+
+    @Column(name = "trailer_url", nullable = true)
+    private String trailerUrl;
 }

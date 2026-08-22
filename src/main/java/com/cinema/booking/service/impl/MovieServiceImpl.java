@@ -25,10 +25,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieResponseDto create(MovieRequestDto dto) {
         Movie movie = movieMapper.toEntity(dto);
-        if (dto.getCategoryId() != null) {
-            MovieCategory category = categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getCategoryId()));
-            movie.setCategory(category);
+        if (dto.getMovieCategoryId() != null) {
+            MovieCategory category = categoryRepository.findById(dto.getMovieCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getMovieCategoryId()));
+            movie.setMovieCategory(category);
         }
         movie = movieRepository.save(movie);
         return movieMapper.toResponseDto(movie);
@@ -40,9 +40,9 @@ public class MovieServiceImpl implements MovieService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", id));
         Movie updated = movieMapper.toEntity(dto);
         updated.setId(existing.getId());
-        if (dto.getCategoryId() != null) {
-            updated.setCategory(categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getCategoryId())));
+        if (dto.getMovieCategoryId() != null) {
+            updated.setMovieCategory(categoryRepository.findById(dto.getMovieCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category", dto.getMovieCategoryId())));
         }
         updated = movieRepository.save(updated);
         return movieMapper.toResponseDto(updated);
