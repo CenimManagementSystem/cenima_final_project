@@ -12,6 +12,7 @@ public class ProductResponseDto {
     private LocalDateTime createdAt;
     private String description;
     private String imageUrl;
+    private String imagePublicId;
     private Boolean isAvailable;
     private String name;
     private BigDecimal price;

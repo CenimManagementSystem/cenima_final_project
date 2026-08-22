@@ -10,7 +10,6 @@ public class MovieMapper {
 
     public Movie toEntity(MovieRequestDto dto) {
         Movie movie = new Movie();
-        movie.setAgeRating(dto.getAgeRating());
         movie.setDescription(dto.getDescription());
         movie.setDurationMinutes(dto.getDurationMinutes());
         movie.setGenre(dto.getGenre());
@@ -25,13 +24,13 @@ public class MovieMapper {
     public MovieResponseDto toResponseDto(Movie movie) {
         MovieResponseDto dto = new MovieResponseDto();
         dto.setId(movie.getId());
-        dto.setAgeRating(movie.getAgeRating());
         dto.setCategoryId(movie.getCategory() != null ? movie.getCategory().getId() : null);
         dto.setDescription(movie.getDescription());
         dto.setDurationMinutes(movie.getDurationMinutes());
         dto.setGenre(movie.getGenre());
         dto.setLanguage(movie.getLanguage());
         dto.setPosterUrl(movie.getPosterUrl());
+        dto.setPosterPublicId(movie.getPosterPublicId());
         dto.setReleaseDate(movie.getReleaseDate());
         dto.setStatus(movie.getStatus());
         dto.setTitle(movie.getTitle());

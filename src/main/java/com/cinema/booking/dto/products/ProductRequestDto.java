@@ -9,18 +9,23 @@ import java.time.LocalDateTime;
 @Data
 public class ProductRequestDto {
 
-    private LocalDateTime createdAt;
-    private String description;
-    private String imageUrl;
-    @NotNull
-    private Boolean isAvailable;
     @NotBlank
     private String name;
+    private String description;
+
+    @NotNull
+    private Boolean isAvailable;
+
     @NotNull @Positive
     private BigDecimal price;
+
     @NotNull @Min(0)
     private Integer stockQuantity;
-    private LocalDateTime updatedAt;
+
     @NotNull
     private Long productCategoryId;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

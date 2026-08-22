@@ -26,8 +26,6 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "age_rating", nullable = true)
-    private String ageRating;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = true)
@@ -48,6 +46,9 @@ public class Movie {
     @Column(name = "poster_url", nullable = true)
     private String posterUrl;
 
+    @Column(name = "poster_public_id", nullable = true)
+    private String posterPublicId;
+
     @Column(name = "release_date", nullable = true)
     private LocalDate releaseDate;
 
@@ -56,5 +57,4 @@ public class Movie {
 
     @Column(name = "title", nullable = false)
     private String title;
-
 }

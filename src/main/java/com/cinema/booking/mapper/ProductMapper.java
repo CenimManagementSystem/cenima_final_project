@@ -10,13 +10,13 @@ public class ProductMapper {
 
     public Product toEntity(ProductRequestDto dto) {
         Product product = new Product();
-        product.setCreatedAt(dto.getCreatedAt());
+      
         product.setDescription(dto.getDescription());
-        product.setImageUrl(dto.getImageUrl());
         product.setIsAvailable(dto.getIsAvailable());
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
         product.setStockQuantity(dto.getStockQuantity());
+        product.setCreatedAt(dto.getCreatedAt());
         product.setUpdatedAt(dto.getUpdatedAt());
         // TODO: FK fields (category) are resolved in the Service layer
         // using their respective repositories, then set on product before saving.
@@ -29,6 +29,7 @@ public class ProductMapper {
         dto.setCreatedAt(product.getCreatedAt());
         dto.setDescription(product.getDescription());
         dto.setImageUrl(product.getImageUrl());
+        dto.setImagePublicId(product.getImagePublicId());
         dto.setIsAvailable(product.getIsAvailable());
         dto.setName(product.getName());
         dto.setPrice(product.getPrice());

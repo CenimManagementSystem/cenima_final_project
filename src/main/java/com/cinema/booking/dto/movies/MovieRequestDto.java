@@ -8,9 +8,6 @@ import java.time.LocalDate;
 @Data
 public class MovieRequestDto {
 
-    @NotBlank
-
-    private String ageRating;
     private Long categoryId;
     private String description;
     @NotNull @Min(1)

@@ -5,8 +5,10 @@ import com.cinema.booking.dto.products.ProductResponseDto;
 import com.cinema.booking.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -17,14 +19,19 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping
-    public ResponseEntity<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto dto) {
-        return new ResponseEntity<>(productService.create(dto), HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponseDto> create(
+            @Valid @ModelAttribute ProductRequestDto dto,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        return new ResponseEntity<>(productService.create(dto, image), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto dto) {
-        return ResponseEntity.ok(productService.update(id, dto));
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponseDto> update(
+            @PathVariable Long id,
+            @Valid @ModelAttribute ProductRequestDto dto,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        return ResponseEntity.ok(productService.update(id, dto, image));
     }
 
     @GetMapping("/{id}")

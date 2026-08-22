@@ -11,9 +11,9 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/movie-category")
 @RequiredArgsConstructor
-public class CategoryController {
+public class MovieCategoryController {
 
     private final CategoryService categoryService;
 
