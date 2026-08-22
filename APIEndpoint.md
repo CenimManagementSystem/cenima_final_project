@@ -17,10 +17,15 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 2. Movies (`/api/movies`)
+## 2. Movies & Movie Categories (`/api/movies`, `/api/movie-category`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
+| `GET` | `/api/movie-category` | List all movie categories | Authenticated |
+| `GET` | `/api/movie-category/{id}` | Get movie category by ID | Authenticated |
+| `POST` | `/api/movie-category` | Create movie category | Staff / Admin |
+| `PUT` | `/api/movie-category/{id}` | Update movie category | Staff / Admin |
+| `DELETE` | `/api/movie-category/{id}` | Delete movie category | Admin |
 | `GET` | `/api/movies` | Get list of all movies | Authenticated |
 | `GET` | `/api/movies/{id}` | Get movie details by ID | Authenticated |
 | `POST` | `/api/movies` | Create a new movie | Staff / Admin |

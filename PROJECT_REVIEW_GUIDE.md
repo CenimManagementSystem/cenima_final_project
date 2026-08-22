@@ -49,13 +49,15 @@ docker compose up -d
 ./mvnw spring-boot:run           # Linux/macOS
 ```
 
-### Seeded accounts (auto-created at startup)
+### Seeded accounts & master data (auto-created at startup)
 
-| Role | Username | Password |
-|---|---|---|
-| ADMIN | `admin` | `Admin123` |
-| STAFF | `staff` | `Staff123` |
-| USER | `user` | `User123` |
+| Role | Username | Password | Notes |
+|---|---|---|---|
+| ADMIN | `admin` | `Admin123` | System administrator with default wallet balance |
+| STAFF | `staff` | `Staff123` | Theater manager with default wallet balance |
+| USER | `user` | `User123` | Customer with default wallet balance ($100 USD) |
+
+*Also seeds foundational master records: Locations, Theaters, Screens, Seats, Movie Categories, Movies, Product Categories, and Products.*
 
 Login via `POST /api/auth/login`, copy the `accessToken`, click **Authorize** in Swagger UI, paste it.
 

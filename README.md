@@ -121,17 +121,28 @@ If you prefer running the application directly on your machine:
 
 ---
 
-## 🔑 Default Seeded Accounts
+## 🌱 Comprehensive Database Seeding
 
-When the backend starts up, `DatabaseSeeder` automatically initializes default accounts:
+When the backend starts up in non-test profiles, `DatabaseSeeder` automatically initializes all foundation master data if not already present:
 
-| Role | Username | Email | Password | Authorities |
-|---|---|---|---|---|
-| **Admin** | `admin` | `admin@cinema.com` | `Admin123` | `ROLE_ADMIN` |
-| **Staff** | `staff` | `staff@cinema.com` | `Staff123` | `ROLE_STAFF` |
-| **User** | `user` | `user@cinema.com` | `User123` | `ROLE_USER` |
+### 1. Default Accounts & Wallets
+| Role | Username | Email | Password | Initial Balance | Authorities |
+|---|---|---|---|---|---|
+| **Admin** | `admin` | `admin@cinema.com` | `Admin123` | `$500.00 USD` | `ROLE_ADMIN` |
+| **Staff** | `staff` | `staff@cinema.com` | `Staff123` | `$200.00 USD` | `ROLE_STAFF` |
+| **User** | `user` | `user@cinema.com` | `User123` | `$100.00 USD` | `ROLE_USER` |
 
-Use these credentials in `/api/auth/login` to obtain JWT Bearer tokens with corresponding role privileges.
+### 2. Master & Hierarchy Reference Data
+- 📍 **Locations**: Phnom Penh Central, Aeon Sen Sok City, Siem Reap Riverside
+- 🏢 **Theaters**: Legend Cinema Central, Major Cineplex Sen Sok, Prime Cineplex Siem Reap
+- 📺 **Screens**: Hall 1 (IMAX), Hall 2 (VIP), Hall 1 (Premium), Hall 1 (Deluxe)
+- 💺 **Seats**: Grid rows (A–E, 1–10) with `STANDARD`, `VIP`, and `COUPLE` seat pricing
+- 🎬 **Movie Categories & Movies**:
+  - Categories: Sci-Fi & Fantasy, Action & Adventure, Animation, Horror & Thriller, Drama & Romance
+  - Movies: *Inception*, *Interstellar*, *Avengers: Endgame*, *Neon Nights*
+- 🍿 **Concessions & Products**:
+  - Categories: Popcorn, Beverages, Snacks, Combos
+  - Products: Caramel Popcorn (L), Salted Popcorn (M), Coca-Cola 500ml, Mineral Water, Nachos & Cheese, Hot Dogs, Movie Night Combos
 
 ---
 
