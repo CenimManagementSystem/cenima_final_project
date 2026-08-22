@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 public class ProductResponseDto {
 
     private Long id;
-
     private LocalDateTime createdAt;
-    private String description;
     private String imageUrl;
     private String imagePublicId;
     private Boolean isAvailable;

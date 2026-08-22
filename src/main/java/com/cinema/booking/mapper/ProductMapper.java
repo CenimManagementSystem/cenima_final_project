@@ -10,8 +10,6 @@ public class ProductMapper {
 
     public Product toEntity(ProductRequestDto dto) {
         Product product = new Product();
-      
-        product.setDescription(dto.getDescription());
         product.setIsAvailable(dto.getIsAvailable());
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
@@ -27,7 +25,6 @@ public class ProductMapper {
         ProductResponseDto dto = new ProductResponseDto();
         dto.setId(product.getId());
         dto.setCreatedAt(product.getCreatedAt());
-        dto.setDescription(product.getDescription());
         dto.setImageUrl(product.getImageUrl());
         dto.setImagePublicId(product.getImagePublicId());
         dto.setIsAvailable(product.getIsAvailable());

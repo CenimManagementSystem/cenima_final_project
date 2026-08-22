@@ -11,7 +11,6 @@ public class ProductRequestDto {
 
     @NotBlank
     private String name;
-    private String description;
 
     @NotNull
     private Boolean isAvailable;
