@@ -19,22 +19,23 @@ public class OpenApiConfig {
     private static final String SECURITY_SCHEME_NAME = "bearerAuth";
     private static final Map<String, String> TAG_ALIASES = Map.ofEntries(
             Map.entry("auth-controller", "Authentication"),
-            Map.entry("location-controller", "Location"),
-            Map.entry("theater-controller", "Theater"),
-            Map.entry("screen-controller", "Screen"),
-            Map.entry("seat-controller", "Seat"),
-            Map.entry("movie-controller", "Movie"),
-            Map.entry("show-controller", "Show"),
-            Map.entry("category-controller", "Category"),
-            Map.entry("product-controller", "Product"),
-            Map.entry("booking-controller", "Booking"),
-            Map.entry("booking-seat-controller", "BookingSeat"),
-            Map.entry("order-controller", "Order"),
-            Map.entry("order-item-controller", "OrderItem"),
-            Map.entry("payment-controller", "Payment"),
-            Map.entry("wallet-controller", "Wallet"),
-            Map.entry("wallet-transaction-controller", "WalletTransaction"),
-            Map.entry("user-controller", "User")
+            Map.entry("location-controller", "Locations"),
+            Map.entry("theater-controller", "Theaters"),
+            Map.entry("screen-controller", "Screens"),
+            Map.entry("seat-controller", "Seats"),
+            Map.entry("movie-controller", "Movies"),
+            Map.entry("show-controller", "Shows / Showtimes"),
+            Map.entry("movie-category-controller", "Movie Categories"),
+            Map.entry("product-category-controller", "Product Categories"),
+            Map.entry("product-controller", "Products"),
+            Map.entry("booking-controller", "Bookings"),
+            Map.entry("booking-seat-controller", "Booking Seats"),
+            Map.entry("order-controller", "Orders"),
+            Map.entry("order-item-controller", "Order Items"),
+            Map.entry("payment-controller", "Payments"),
+            Map.entry("wallet-controller", "Wallets"),
+            Map.entry("wallet-transaction-controller", "Wallet Transactions"),
+            Map.entry("user-controller", "User Management")
     );
 
     @Bean
@@ -46,22 +47,23 @@ public class OpenApiConfig {
                         .description("REST API for managing the Cinema Booking System"))
                 .tags(List.of(
                         new Tag().name("Authentication").description("Endpoints for User Registration and Authentication"),
-                        new Tag().name("Location").description("Endpoints for managing Location"),
-                        new Tag().name("Theater").description("Endpoints for managing Theater"),
-                        new Tag().name("Screen").description("Endpoints for managing Screen"),
-                        new Tag().name("Seat").description("Endpoints for managing Seat"),
-                        new Tag().name("Movie").description("Endpoints for managing Movie"),
-                        new Tag().name("Show").description("Endpoints for managing Show"),
-                        new Tag().name("Category").description("Endpoints for managing Category"),
-                        new Tag().name("Product").description("Endpoints for managing Product"),
-                        new Tag().name("Booking").description("Endpoints for managing Booking"),
-                        new Tag().name("BookingSeat").description("Endpoints for managing BookingSeat"),
-                        new Tag().name("Order").description("Endpoints for managing Order"),
-                        new Tag().name("OrderItem").description("Endpoints for managing OrderItem"),
-                        new Tag().name("Payment").description("Endpoints for managing Payment"),
-                        new Tag().name("Wallet").description("Endpoints for managing Wallet"),
-                        new Tag().name("WalletTransaction").description("Endpoints for managing WalletTransaction"),
-                        new Tag().name("User").description("Endpoints for managing User")
+                        new Tag().name("Movie Categories").description("Endpoints for managing Movie Categories"),
+                        new Tag().name("Movies").description("Endpoints for managing Movies"),
+                        new Tag().name("Locations").description("Endpoints for managing Locations"),
+                        new Tag().name("Theaters").description("Endpoints for managing Theaters"),
+                        new Tag().name("Screens").description("Endpoints for managing Screens"),
+                        new Tag().name("Seats").description("Endpoints for managing Seats"),
+                        new Tag().name("Shows / Showtimes").description("Endpoints for managing Shows and Showtimes"),
+                        new Tag().name("Bookings").description("Endpoints for managing Bookings"),
+                        new Tag().name("Booking Seats").description("Endpoints for managing Booking Seats"),
+                        new Tag().name("Product Categories").description("Endpoints for managing Product Categories"),
+                        new Tag().name("Products").description("Endpoints for managing Products"),
+                        new Tag().name("Orders").description("Endpoints for managing Orders"),
+                        new Tag().name("Order Items").description("Endpoints for managing Order Items"),
+                        new Tag().name("Payments").description("Endpoints for managing Payments"),
+                        new Tag().name("Wallets").description("Endpoints for managing Wallets"),
+                        new Tag().name("Wallet Transactions").description("Endpoints for managing Wallet Transactions"),
+                        new Tag().name("User Management").description("Endpoints for User Administration")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .components(new Components()
