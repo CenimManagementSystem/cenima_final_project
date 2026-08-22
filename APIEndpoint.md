@@ -1,6 +1,6 @@
 # API Endpoints Specification
 
-Complete REST API endpoint documentation for the Cinema Booking System.
+Complete REST API endpoint documentation for the Cinema Booking System, reflecting all RestControllers and Security permissions.
 
 > [!TIP]
 > Interactive OpenAPI documentation and test console are available via Swagger UI at:
@@ -17,7 +17,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 2. Movies & Movie Categories (`/api/movies`, `/api/movie-category`)
+## 2. Movie Categories (`/api/movie-category`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -25,7 +25,14 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 | `GET` | `/api/movie-category/{id}` | Get movie category by ID | Authenticated |
 | `POST` | `/api/movie-category` | Create movie category | Staff / Admin |
 | `PUT` | `/api/movie-category/{id}` | Update movie category | Staff / Admin |
-| `DELETE` | `/api/movie-category/{id}` | Delete movie category | Admin |
+| `DELETE` | `/api/movie-category/{id}` | Delete movie category | Staff / Admin |
+
+---
+
+## 3. Movies (`/api/movies`)
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
 | `GET` | `/api/movies` | Get list of all movies | Authenticated |
 | `GET` | `/api/movies/{id}` | Get movie details by ID | Authenticated |
 | `POST` | `/api/movies` | Create a new movie | Staff / Admin |
@@ -34,7 +41,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 3. Theaters & Locations (`/api/theaters`, `/api/locations`)
+## 4. Locations (`/api/locations`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -43,6 +50,13 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 | `POST` | `/api/locations` | Create a location | Staff / Admin |
 | `PUT` | `/api/locations/{id}` | Update a location | Staff / Admin |
 | `DELETE` | `/api/locations/{id}` | Delete a location | Admin |
+
+---
+
+## 5. Theaters (`/api/theaters`)
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
 | `GET` | `/api/theaters` | List all theaters | Authenticated |
 | `GET` | `/api/theaters/{id}` | Get theater by ID | Authenticated |
 | `POST` | `/api/theaters` | Create a theater | Staff / Admin |
@@ -51,7 +65,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 4. Screens & Seats (`/api/screens`, `/api/seats`)
+## 6. Screens (`/api/screens`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -60,6 +74,13 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 | `POST` | `/api/screens` | Create a new screen | Staff / Admin |
 | `PUT` | `/api/screens/{id}` | Update a screen | Staff / Admin |
 | `DELETE` | `/api/screens/{id}` | Delete a screen | Admin |
+
+---
+
+## 7. Seats (`/api/seats`)
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
 | `GET` | `/api/seats` | List all seats | Authenticated |
 | `GET` | `/api/seats/{id}` | Get seat details by ID | Authenticated |
 | `POST` | `/api/seats` | Create a seat | Staff / Admin |
@@ -68,7 +89,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 5. Shows / Showtimes (`/api/shows`)
+## 8. Shows / Showtimes (`/api/shows`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -80,7 +101,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 6. Bookings & Seat Reservations (`/api/bookings`, `/api/booking-seats`)
+## 9. Bookings & Booking Seats (`/api/bookings`, `/api/booking-seats`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -97,7 +118,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 7. Concessions & Products (`/api/product-categories`, `/api/products`)
+## 10. Concessions & Products (`/api/product-categories`, `/api/products`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -114,7 +135,7 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 8. Orders & Order Items (`/api/orders`, `/api/order-items`)
+## 11. Orders & Order Items (`/api/orders`, `/api/order-items`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -131,19 +152,19 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 
 ---
 
-## 9. Payments (`/api/payments`)
+## 12. Payments (`/api/payments`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
 | `GET` | `/api/payments` | List payments | Authenticated |
 | `GET` | `/api/payments/{id}` | Get payment by ID | Authenticated |
 | `POST` | `/api/payments` | Process a payment | Authenticated |
-| `PUT` | `/api/payments/{id}` | Update payment record | Admin |
-| `DELETE` | `/api/payments/{id}` | Delete payment record | Admin |
+| `PUT` | `/api/payments/{id}` | Update payment record | Authenticated |
+| `DELETE` | `/api/payments/{id}` | Delete payment record | Authenticated |
 
 ---
 
-## 10. Wallets & Transactions (`/api/wallets`, `/api/wallet-transactions`)
+## 13. Wallets & Transactions (`/api/wallets`, `/api/wallet-transactions`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
@@ -151,21 +172,21 @@ Complete REST API endpoint documentation for the Cinema Booking System.
 | `GET` | `/api/wallets/{id}` | Get wallet by ID | Authenticated |
 | `POST` | `/api/wallets` | Create a new wallet | Authenticated |
 | `PUT` | `/api/wallets/{id}` | Update wallet | Authenticated |
-| `DELETE` | `/api/wallets/{id}` | Delete wallet | Admin |
+| `DELETE` | `/api/wallets/{id}` | Delete wallet | Authenticated |
 | `GET` | `/api/wallet-transactions` | List wallet transactions | Authenticated |
 | `GET` | `/api/wallet-transactions/{id}` | Get wallet transaction by ID | Authenticated |
 | `POST` | `/api/wallet-transactions` | Add wallet transaction | Authenticated |
-| `PUT` | `/api/wallet-transactions/{id}` | Update transaction | Admin |
-| `DELETE` | `/api/wallet-transactions/{id}` | Delete transaction | Admin |
+| `PUT` | `/api/wallet-transactions/{id}` | Update transaction | Authenticated |
+| `DELETE` | `/api/wallet-transactions/{id}` | Delete transaction | Authenticated |
 
 ---
 
-## 11. User Management (`/api/users`)
+## 14. User Management (`/api/users`)
 
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
 | `GET` | `/api/users` | List all users | Admin |
-| `GET` | `/api/users/{id}` | Get user by ID | Authenticated |
+| `GET` | `/api/users/{id}` | Get user by ID | Admin |
 | `POST` | `/api/users` | Create user | Admin |
-| `PUT` | `/api/users/{id}` | Update user details | Authenticated |
+| `PUT` | `/api/users/{id}` | Update user details | Admin |
 | `DELETE` | `/api/users/{id}` | Delete user | Admin |
