@@ -38,9 +38,10 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        log.info("Starting master database seeding...");
+        try {
+            log.info("Starting master database seeding...");
 
-        // 1. Users
+            // 1. Users
         User admin = seedUserIfNotExists("admin", "admin@cinema.com", "Admin User", "Admin123", Role.ADMIN);
         User staff = seedUserIfNotExists("staff", "staff@cinema.com", "Staff Member", "Staff123", Role.STAFF);
         User customer = seedUserIfNotExists("user", "user@cinema.com", "Regular Customer", "User123", Role.USER);
@@ -190,6 +191,11 @@ public class DatabaseSeeder implements CommandLineRunner {
         seedProductIfNotExists("Movie Night Combo (Popcorn + 2 Drinks)", BigDecimal.valueOf(7.50), "https://images.unsplash.com/photo-1572177191856-3cde618dee1f?auto=format&fit=crop&w=400&q=80", true, 50, combosCat);
 
         log.info("Master database seeding completed successfully.");
+        } catch (Throwable t) {
+            System.err.println("Database Seeder failed with exception: " + t.getMessage());
+            t.printStackTrace();
+            throw t;
+        }
     }
 
     private User seedUserIfNotExists(String username, String email, String name, String rawPassword, Role role) {

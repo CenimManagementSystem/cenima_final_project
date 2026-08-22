@@ -46,4 +46,6 @@ Thumbs.db
 
 ### Logs ###
 *.log
+*.txt
+file.txt
 logs/
